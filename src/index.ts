@@ -1,4 +1,15 @@
-import {GETTodayStats} from './api/twse_OAPI';
+import {GETTaiwanForignerAssest} from './api/chip';
+import {
+  GETTaiwanCashFlowsStatement,
+  GETTaiwanRevenue,
+  GETTaiwanStockBalanceSheet,
+  GETTaiwanStockFinancialStatements,
+  GETTaiwanStockYearRevenue,
+  GetTaiwanStockYield,
+} from './api/fundamental';
+import {GETMonthStockStatsByDate, GETTaiwanTodayStats} from './api/technical';
+import {config} from './config';
+import {CloseConnect, ConnectToDB, GetContent} from './service/dbhandler';
 
 // 分析帶入的標頭屬性
 const argv: any = (() => {
@@ -11,15 +22,25 @@ const argv: any = (() => {
   });
   return args;
 })();
-if (argv['date'] === undefined || argv['stockNo'] === undefined) {
-  console.error('缺少標頭屬性 --date="YYYY-MM-DD"  --stockNo=1234 ');
-}
+// if (argv['date'] === undefined || argv['stockNo'] === undefined) {
+//   console.error('缺少標頭屬性 --date="YYYY-MM-DD"  --stockNo=1234 ');
+// }
 //
 
 async function main() {
-  //const result = await GETStockStatByDay('0050', '20220201');
-  const raw = await GETTodayStats();
-  console.log(raw);
+  // const raw = await GetTaiwanStockYield(/*'2330'*/ '20150206');
+  // console.log(raw);
+  await ConnectToDB(
+    config.MariaDB.host,
+    config.MariaDB.username,
+    config.MariaDB.password,
+    'Dashboard'
+  );
+
+  await GetContent(
+    'INSERT INTO Dashboard.Dashboard (Name) VALUES("Greeting");'
+  );
+  await CloseConnect();
 }
 
 main();
