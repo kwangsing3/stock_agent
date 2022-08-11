@@ -1,4 +1,4 @@
-name: CI/CD
+name: 更新每日盤後資訊
 on:
   schedule: 
     - cron: '* */24 * * *'

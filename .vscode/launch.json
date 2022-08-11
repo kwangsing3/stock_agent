@@ -10,7 +10,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/src/entry/updateCompanies.ts",
+            "program": "${workspaceFolder}/src/entry/updateStockHistory.ts",
             "preLaunchTask": "tsc: 建置 - tsconfig.json",
             "outFiles": [
                 "${workspaceFolder}/build/**/*.js"

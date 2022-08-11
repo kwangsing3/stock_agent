@@ -34,7 +34,7 @@ async function Task1() {
   );
   let query = `DROP TABLE ${DATABASE}.${TABLE};`;
   await GetContent(query);
-  query = `CREATE TABLE ${DATABASE}.${TABLE} 
+  query = `CREATE TABLE IF NOT EXISTS ${DATABASE}.${TABLE} 
   (
     Code  VARCHAR(128),
     Name  VARCHAR(128),
@@ -79,7 +79,7 @@ async function Task3(input: any) {
       '${data.ClosingPrice}',
       '${data.Change}',
       '${data.Transaction}'
-    );`;
+    )ON DUPLICATE KEY UPDATE date = "${key.date}";`;
     await GetContent(query);
   }
   await CloseConnect();

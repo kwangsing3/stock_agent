@@ -1,6 +1,3 @@
-import {join} from 'path';
-import {MonthStockStats} from '../model/stockstat';
-import {WriteFileAsJSON} from '../utility/fileIO';
 import {GET} from '../utility/httpmethod';
 
 const host = 'https://www.twse.com.tw';

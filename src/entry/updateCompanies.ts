@@ -32,7 +32,9 @@ async function Task1() {
     formatSTR += ii + ' VARCHAR(256)' + ',';
   }
   formatSTR = formatSTR.slice(0, formatSTR.length - 1);
-  await GetContent(`CREATE TABLE ${DATABASE}.${TABLE}(${formatSTR});`);
+  await GetContent(
+    `CREATE TABLE IF NOT EXISTS ${DATABASE}.${TABLE}(${formatSTR});`
+  );
   await CloseConnect();
 }
 async function Task2() {
@@ -91,7 +93,7 @@ async function Task3(input: CompanyInfo[]) {
       "${key.傳真機號碼}",
       "${key.電子郵件信箱}",
       "${key.網址}"
-    )`;
+    )ON DUPLICATE KEY UPDATE date = "${key.公司代號}";`;
     await GetContent(query);
   }
   await CloseConnect();
