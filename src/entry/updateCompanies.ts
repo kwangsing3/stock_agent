@@ -93,7 +93,7 @@ async function Task3(input: CompanyInfo[]) {
       "${key.傳真機號碼}",
       "${key.電子郵件信箱}",
       "${key.網址}"
-    )ON DUPLICATE KEY UPDATE date = "${key.公司代號}";`;
+    )ON DUPLICATE KEY UPDATE 公司代號 = "${key.公司代號}";`;
     await GetContent(query);
   }
   await CloseConnect();

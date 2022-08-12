@@ -24,4 +24,4 @@ jobs:
       - name: Install Packages
         run: test -d node_modules && echo "node_modules exists" || npm ci
  
-      - run: npm run prod
+      - run: npm run dailystats
