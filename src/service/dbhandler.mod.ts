@@ -34,7 +34,7 @@ export async function GetContent(query: string): Promise<any> {
   if (conn) {
     conn.end();
   } else {
-    throw new Error('GSS_hp_Agent: DataBase 連接錯誤');
+    throw new Error('DataBase 連接錯誤');
   }
 
   return data;
@@ -45,6 +45,6 @@ export async function GetContent(query: string): Promise<any> {
  */
 export async function CloseConnect() {
   await pool.end().catch((err: any) => {
-    throw new Error(`GSS_hp_Agent: ${err}`);
+    throw err;
   });
 }

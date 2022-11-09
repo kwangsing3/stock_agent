@@ -1,7 +1,7 @@
-import {GETMonthStockStatsByDate} from '../api/technical';
-import {config} from '../config';
-import {CloseConnect, ConnectToDB, GetContent} from '../service/dbhandler';
-import {SetRatePerMin} from '../utility/httpmethod';
+import technicalImple from '../api/technical.imple';
+import config from '../config';
+import {CloseConnect, ConnectToDB, GetContent} from '../service/dbhandler.mod';
+import {SetRatePerMin} from '../utility/httpmethod.mod';
 
 const DATABASE = '歷史資料';
 const timestemp = GetTimeStemp('2010', '01'); //時間陣列
@@ -70,8 +70,10 @@ async function Task2() {
       Transaction VARCHAR(64)
     );
     `);
+    const entity = new technicalImple();
     for (const timp of timestemp) {
-      const raw = (await GETMonthStockStatsByDate(com['公司代號'], timp)).data;
+      const raw = (await entity.GETMonthStockStatsByDate(com['公司代號'], timp))
+        .data;
       for (const key of raw) {
         await GetContent(`
         INSERT INTO 歷史資料.${com['公司簡稱']}

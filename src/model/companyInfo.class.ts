@@ -1,5 +1,5 @@
 //公司基本資料
-export default class CompanyInfo {
+export default class {
   constructor(raw?: unknown) {
     Object.assign(this, raw);
   }

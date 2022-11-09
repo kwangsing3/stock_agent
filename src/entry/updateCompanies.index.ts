@@ -1,7 +1,7 @@
-import {config} from '../config';
-import CompanyInfo from '../model/componey';
-import {CloseConnect, ConnectToDB, GetContent} from '../service/dbhandler';
-import {GET} from '../utility/httpmethod';
+import config from '../config';
+import CompanyInfo from '../model/companyInfo.class';
+import {CloseConnect, ConnectToDB, GetContent} from '../service/dbhandler.mod';
+import {GET} from '../utility/httpmethod.mod';
 
 const DATABASE = 'Dashboard';
 const TABLE = '上市公司資訊';

@@ -1,7 +1,7 @@
-export const config = {
+export default {
   MariaDB: {
-    host: 'kwangsing3.synology.me',
-    username: 'admin',
-    password: 'Aa1234567890@',
+    host: '127.0.0.1',
+    username: 'genesis',
+    password: 'manager1',
   },
 };

@@ -45,7 +45,7 @@ export class MonthStockStats {
 }
 
 //單個公司的每日盤後資料
-export default class DailyStockStat {
+export class DailyStockStat {
   constructor(raw?: unknown) {
     Object.assign(this, raw);
   }
