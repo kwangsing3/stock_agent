@@ -26,14 +26,20 @@ async function Task1() {
     config.MariaDB.password,
     ''
   );
+  await GetContent(`CREATE DATABASE IF NOT EXISTS ${DATABASE};`);
   await GetContent(`DROP TABLE IF EXISTS ${DATABASE}.${TABLE} ;`);
   const tmp = new 公司基本資訊();
   for (const ii in tmp) {
-    formatSTR += ii + ' VARCHAR(256)' + ',';
+    formatSTR +=
+      ii +
+      (ii !== '公司代號' ? ' LONGTEXT' : ' VARCHAR(256) PRIMARY KEY') +
+      ',';
   }
   formatSTR = formatSTR.slice(0, formatSTR.length - 1);
   await GetContent(
-    `CREATE TABLE IF NOT EXISTS ${DATABASE}.${TABLE}(${formatSTR});`
+    `CREATE TABLE IF NOT EXISTS ${DATABASE}.${TABLE}(${formatSTR}) 
+    CHARACTER SET 'utf8' 
+    COLLATE 'utf8_icelandic_ci';`
   );
   await CloseConnect();
 }
