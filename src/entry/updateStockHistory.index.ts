@@ -79,18 +79,18 @@ async function Task2() {
         INSERT INTO 歷史資料.${com['公司簡稱']}
         VALUES
         (
-          "${key.Code}",
-          "${key.Name}",
-          "${key.date}",
-          "${key.TradeVolume}",
-          "${key.TradeValue}",
-          "${key.OpeningPrice}",
-          "${key.HighestPrice}",
-          "${key.LowestPrice}",
-          "${key.ClosingPrice}",
-          "${key.Change}",
-          "${key.Transaction}"
-        ) ON DUPLICATE KEY UPDATE date = "${key.date}";
+          "${key.證券代號}",
+          "${key.證券名稱}",
+          "${key.日期}",
+          "${key.成交股數}",
+          "${key.成交金額}",
+          "${key.開盤價}",
+          "${key.最高價}",
+          "${key.最低價}",
+          "${key.收盤價}",
+          "${key.漲跌價差}",
+          "${key.成交筆數}"
+        ) ON DUPLICATE KEY UPDATE date = "${key.日期}";
         `);
       }
       //

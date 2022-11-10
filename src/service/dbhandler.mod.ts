@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as mariadb from 'mariadb';
 
 //先實作每一次動作都重新連接，並在結束後斷開。

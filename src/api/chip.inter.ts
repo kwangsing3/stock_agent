@@ -1,6 +1,5 @@
 export default interface 籌碼面操作_inter {
-  簡訊到囉: string;
-  GETTaiwanForignerAssest(date: string): Promise<any>;
+  GETTaiwanForignerAssest(date: string): Promise<公司籌碼面[]>;
 }
 /*
   籌碼面：
@@ -18,3 +17,21 @@ export default interface 籌碼面操作_inter {
 
     *外資歷史持股變化
 */
+export class 公司籌碼面 {
+  證券代號 = '';
+  證券名稱 = '';
+  外資買進股數 = '';
+  外資賣出股數 = '';
+  外資買賣超股數 = '';
+  投信買進股數 = '';
+  投信賣出股數 = '';
+  投信買賣超股數 = '';
+  自營商買賣超股數 = '';
+  '自營商買進股數(自行買賣)' = '';
+  '自營商賣出股數(自行買賣)' = '';
+  '自營商買賣超股數(自行買賣)' = '';
+  '自營商買進股數(避險)' = '';
+  '自營商賣出股數(避險)' = '';
+  '自營商買賣超股數(避險)' = '';
+  三大法人買賣超股數 = '';
+}

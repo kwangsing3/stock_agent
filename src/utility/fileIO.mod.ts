@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable node/no-unsupported-features/node-builtins */
 import * as fs from 'node:fs/promises';
 import {stat} from 'node:fs/promises';
-import {extname} from 'node:path';
 import path = require('node:path');
 import {join} from 'path';
 import {dirname} from 'path';

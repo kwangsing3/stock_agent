@@ -1,5 +1,5 @@
 import config from '../config';
-import CompanyInfo from '../model/companyInfo.class';
+import {公司基本資訊} from '../model/companyInfo.class';
 import {CloseConnect, ConnectToDB, GetContent} from '../service/dbhandler.mod';
 import {GET} from '../utility/httpmethod.mod';
 
@@ -24,10 +24,10 @@ async function Task1() {
     config.MariaDB.host,
     config.MariaDB.username,
     config.MariaDB.password,
-    `${DATABASE}`
+    ''
   );
-  await GetContent(`DROP TABLE ${DATABASE}.${TABLE};`);
-  const tmp = new CompanyInfo();
+  await GetContent(`DROP TABLE IF EXISTS ${DATABASE}.${TABLE} ;`);
+  const tmp = new 公司基本資訊();
   for (const ii in tmp) {
     formatSTR += ii + ' VARCHAR(256)' + ',';
   }
@@ -39,17 +39,17 @@ async function Task1() {
 }
 async function Task2() {
   //獲取各股上市總表
-  const result: CompanyInfo[] = [];
+  const result: 公司基本資訊[] = [];
   const urls = 'https://openapi.twse.com.tw/v1/opendata/t187ap03_L';
   let raw = await GET(urls);
   raw = raw['data'];
   for (const key of raw) {
-    const tmp = new CompanyInfo(key);
+    const tmp = new 公司基本資訊(key);
     result.push(tmp);
   }
   return result;
 }
-async function Task3(input: CompanyInfo[]) {
+async function Task3(input: 公司基本資訊[]) {
   if (input.length < 1) return;
   await ConnectToDB(
     config.MariaDB.host,

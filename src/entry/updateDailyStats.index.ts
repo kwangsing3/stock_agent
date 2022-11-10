@@ -1,7 +1,7 @@
 import {CloseConnect, ConnectToDB, GetContent} from '../service/dbhandler.mod';
 import config from '../config';
-import {DailyStockStat} from '../model/stockstat.class';
 import technicalImple from '../api/technical.imple';
+import {每日盤後資訊} from '../api/technical.inter';
 
 const DATABASE = '每日資訊';
 const TABLE = '今日盤後資料';
@@ -56,7 +56,7 @@ async function Task2() {
   console.log('完成獲取盤後資料');
   return raw;
 }
-async function Task3(input: any) {
+async function Task3(input: 每日盤後資訊[]) {
   await ConnectToDB(
     config.MariaDB.host,
     config.MariaDB.username,
@@ -64,21 +64,21 @@ async function Task3(input: any) {
     `${DATABASE}`
   );
   for (const key of input) {
-    const data = new DailyStockStat(key);
+    const data = new 每日盤後資訊(key);
     const query = `INSERT INTO ${DATABASE}.${TABLE} 
     VALUES (
-      '${data.Code}',
-      '${data.Name}',
-      '${data.date}',
-      '${data.TradeVolume}',
-      '${data.TradeValue}',
-      '${data.OpeningPrice}',
-      '${data.HighestPrice}',
-      '${data.LowestPrice}',
-      '${data.ClosingPrice}',
-      '${data.Change}',
-      '${data.Transaction}'
-    )ON DUPLICATE KEY UPDATE date = "${key.date}";`;
+      '${data.證券代號}',
+      '${data.證券名稱}',
+      '${data.日期}',
+      '${data.成交股數}',
+      '${data.成交金額}',
+      '${data.開盤價}',
+      '${data.最高價}',
+      '${data.最低價}',
+      '${data.收盤價}',
+      '${data.漲跌價差}',
+      '${data.成交筆數}'
+    )ON DUPLICATE KEY UPDATE date = "${key.日期}";`;
     await GetContent(query);
   }
   await CloseConnect();
