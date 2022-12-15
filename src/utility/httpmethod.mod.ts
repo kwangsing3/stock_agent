@@ -22,7 +22,7 @@ export async function GET(url: string): Promise<any> {
     data = await axios(config);
     cache = new Date();
   } catch (error: any) {
-    console.log(error);
+    return error;
   }
   return data;
 }
@@ -52,12 +52,12 @@ export async function POST(
     data = await axios(config);
     cache = new Date();
   } catch (error: any) {
-    console.log(error['message']);
+    return error['message'];
   }
   return data;
 }
 
-function sleep(ms: number): Promise<unknown> {
+export function sleep(ms: number): Promise<unknown> {
   return new Promise(resolve => {
     setTimeout(resolve, ms);
   });
