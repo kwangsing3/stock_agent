@@ -4,4 +4,5 @@ export default {
     username: 'genesis',
     password: 'manager1',
   },
+  GraphQLHost: 'http://172.18.60.101/query',
 };

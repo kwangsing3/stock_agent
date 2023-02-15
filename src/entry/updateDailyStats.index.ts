@@ -1,7 +1,5 @@
-import {CloseConnect, ConnectToDB, GetContent} from '../service/dbhandler.mod';
-import config from '../config';
 import technicalImple from '../api/technical.imple';
-import {單日盤後資訊} from '../model/每日盤後資訊';
+import 單日個股歷史資料 from '../model/單日個股歷史資料.inter';
 //1. 清除資料庫，並重新建造
 //2. 獲取盤後資料
 //3. 寫入資料庫
@@ -14,39 +12,13 @@ try {
 }
 
 export async function Task() {
-  await ConnectToDB(
-    config.MariaDB.host,
-    config.MariaDB.username,
-    config.MariaDB.password,
-    ''
-  );
   await Task1();
   const raw = await Task2();
   await Task3(raw);
-  await CloseConnect();
   console.log('今日盤後資料獲取完成。');
 }
 
 async function Task1() {
-  let query = `DROP TABLE ${DATABASE}.${TABLE};`;
-  await GetContent(query);
-  query = `CREATE TABLE IF NOT EXISTS ${DATABASE}.${TABLE} 
-  (
-    證券代號  VARCHAR(128),
-    證券名稱  VARCHAR(128),
-    日期  VARCHAR(128),
-    成交股數  VARCHAR(128),
-    成交金額  VARCHAR(128),
-    開盤價  VARCHAR(128),
-    最高價  VARCHAR(128),
-    最低價  VARCHAR(128),
-    收盤價  VARCHAR(128),
-    漲跌價差  VARCHAR(128),
-    成交筆數  VARCHAR(128)
-  )
-  CHARACTER SET = utf8
-  ;`;
-  await GetContent(query);
   console.log('重建每日盤後資料庫');
 }
 async function Task2() {
@@ -55,9 +27,9 @@ async function Task2() {
   console.log('完成獲取盤後資料');
   return raw;
 }
-async function Task3(input: 單日盤後資訊[]) {
+async function Task3(input: 單日個股歷史資料[]) {
   for (const key of input) {
-    const data: 單日盤後資訊 = key;
+    const data: 單日個股歷史資料 = key;
     const query = `INSERT INTO ${DATABASE}.${TABLE} 
     VALUES (
       '${data.證券代號}',
@@ -84,6 +56,5 @@ async function Task3(input: 單日盤後資訊[]) {
     漲跌價差 = "${key.漲跌價差}",
     成交筆數 = "${key.成交筆數}"
     ;`;
-    await GetContent(query);
   }
 }

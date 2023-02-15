@@ -1,10 +1,7 @@
-import config from '../config';
-import {CloseConnect, ConnectToDB, GetContent} from '../service/dbhandler.mod';
 import {GET} from '../utility/httpmethod.mod';
 
 const DATABASE = 'Dashboard';
 const TABLE = '上市公司資訊';
-let formatSTR = '';
 try {
   Task();
 } catch (error) {
@@ -12,40 +9,11 @@ try {
 }
 
 export async function Task() {
-  await ConnectToDB(
-    config.MariaDB.host,
-    config.MariaDB.username,
-    config.MariaDB.password,
-    ''
-  );
-  await Task1();
   const raw = await Task2();
   await Task3(raw);
   console.log(`上市公司資料獲取完成 - 總共${raw.length}筆`);
-  await CloseConnect();
 }
 
-async function Task1() {
-  await GetContent(`CREATE DATABASE IF NOT EXISTS ${DATABASE};`);
-  await GetContent(`DROP TABLE IF EXISTS ${DATABASE}.${TABLE} ;`);
-  const tmp = new 公司基本資訊();
-  for (const ii in tmp) {
-    formatSTR +=
-      ii +
-      (ii !== '公司代號'
-        ? typeof ii === 'string'
-          ? ' LONGTEXT'
-          : ` ${typeof ii}`
-        : ' VARCHAR(256) PRIMARY KEY') +
-      ',';
-  }
-  formatSTR = formatSTR.slice(0, formatSTR.length - 1);
-  await GetContent(
-    `CREATE TABLE IF NOT EXISTS ${DATABASE}.${TABLE}(${formatSTR}) 
-    CHARACTER SET 'utf8' 
-    COLLATE 'utf8_icelandic_ci';`
-  );
-}
 async function Task2() {
   //獲取各股上市總表
   const result: 公司基本資訊[] = [];
@@ -129,7 +97,6 @@ async function Task3(input: 公司基本資訊[]) {
     電子郵件信箱 = "${key.電子郵件信箱}",
     網址 = "${key.網址}";
     `;
-    await GetContent(query);
   }
 }
 

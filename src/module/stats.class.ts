@@ -1,7 +1,6 @@
 // 各種個股的統計資訊
 
-import {單日盤後資訊} from '../model/每日盤後資訊';
-import {GetContent, GetNameByCode} from '../service/dbhandler.mod';
+import 單日個股歷史資料 from '../model/單日個股歷史資料.inter';
 
 interface StatMode {
   /**
@@ -26,11 +25,7 @@ export default class implements StatMode {
   ): Promise<number> {
     amount = amount === undefined || amount < 0 ? 30 : amount;
     amount = amount > 1000 ? 1000 : amount; //Max:1000
-    const raw: 單日盤後資訊[] = await GetContent(`
-    SELECT * FROM 歷史資料.${companyName} 
-    ORDER BY 日期 DESC
-    LIMIT ${amount};
-    `);
+    const raw: 單日個股歷史資料[] = [];
     let res = 0;
     for (const key of raw) {
       try {
@@ -45,7 +40,7 @@ export default class implements StatMode {
     code: string,
     amount?: number
   ): Promise<number> {
-    const name = await GetNameByCode(code);
+    const name = '';
     return this.GetRecentTurnOverByName(name, amount);
   }
 }

@@ -1,7 +1,3 @@
-import {emit} from 'process';
-import config from './config';
-import rankMod from './module/rank.class';
-import {CloseConnect, ConnectToDB} from './service/dbhandler.mod';
 /*
   src/entry/*.index.ts
     1. 獲取每日盤後資料
@@ -9,10 +5,13 @@ import {CloseConnect, ConnectToDB} from './service/dbhandler.mod';
     3. .....
 */
 
-async function main() {
-  const ent = new rankMod();
-  await ent.GetTurnOverRank();
+import {GetStockByCode} from './service/mongoDbhandler.mod';
 
+async function main() {
+  //const ent = new rankMod();
+  //await ent.GetTurnOverRank();
+
+  const raw = await GetStockByCode('0050');
   console.log();
 }
 main();

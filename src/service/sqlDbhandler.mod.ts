@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as mariadb from 'mariadb';
-import {單日盤後資訊} from '../model/每日盤後資訊';
+import 每日盤後資訊 from '../model/單日個股歷史資料.inter';
 let pool: mariadb.Pool;
 export function ConnectToDB(
   host: string,
@@ -74,7 +74,7 @@ export async function GetNameByCode(code: string): Promise<string> {
 export async function GetMonthRecordByCode(
   code: string,
   Ymonth: string
-): Promise<單日盤後資訊[]> {
+): Promise<每日盤後資訊[]> {
   const codeR: {公司簡稱: string}[] = await GetContent(`
   SELECT 公司簡稱 FROM Dashboard.上市公司資訊
   WHERE 公司代號 = "${code}";
@@ -85,8 +85,8 @@ export async function GetMonthRecordByCode(
 export async function GetMonthRecordByName(
   companyName: string,
   Ymonth: string
-): Promise<單日盤後資訊[]> {
-  const raw: 單日盤後資訊[] = await GetContent(`
+): Promise<每日盤後資訊[]> {
+  const raw: 每日盤後資訊[] = await GetContent(`
   SELECT * FROM 歷史資料.${companyName} 
   WHERE 日期 like "${Ymonth}%";
   `);
