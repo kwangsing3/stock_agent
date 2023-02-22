@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {POST} from './httpmethod.mod';
 
 export default async (

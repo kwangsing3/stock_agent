@@ -13,13 +13,13 @@ try {
 }
 
 export async function Task() {
-  const coms = await Task2();
-  await task3(coms);
+  await Task2();
+  await task3();
   console.log('上市公司資料獲取完成。');
 }
 
 //獲取各股上市總表
-async function Task2(): Promise<{name: string; code: string}[]> {
+async function Task2() {
   const raw = await graphqlFunc(
     config.GraphQLHost,
     `
@@ -32,10 +32,17 @@ async function Task2(): Promise<{name: string; code: string}[]> {
     `
   );
   const res = raw['data']['data'];
-  return res['stock'];
+  const coms: {name: string; code: string}[] = res['stock'];
+  for (const key of coms) {
+    companies.push({
+      公司代號: key.code,
+      公司簡稱: '',
+    });
+  }
+  return;
 }
 
-async function task3(companies: {name: string; code: string}[]) {
+async function task3() {
   const entity = new technicalImple();
 
   for (const com of companies) {
@@ -44,11 +51,11 @@ async function task3(companies: {name: string; code: string}[]) {
       let records: 單日個股歷史資料[] = [];
       await sleep(3 * 1000);
       try {
-        records = await entity.GETMonthStockStats(com['code'], timp);
+        records = await entity.GETMonthStockStats(com['公司代號'], timp);
         //prefix name
-        for (const index in records) records[index].證券名稱 = com.name;
+        for (const index in records) records[index].證券名稱 = com.公司簡稱;
       } catch (error) {
-        console.error(`${com['code']}, ${timp} - 獲取失敗`);
+        console.error(`${com['公司代號']}, ${timp} - 獲取失敗`);
       }
       let skip = false;
       for (const record of records) {
@@ -74,25 +81,27 @@ async function task3(companies: {name: string; code: string}[]) {
               code: record.證券代號,
               name: record.證券名稱,
               date: record.日期,
-              openPrice: parseFloat(record.開盤價),
-              closePrice: parseFloat(record.收盤價),
-              highestPrice: parseFloat(record.最高價),
-              lowestPrice: parseFloat(record.最低價),
-              priceDiff: parseFloat(record.漲跌價差),
-              tradingVolume: parseFloat(record.成交筆數),
-              transAmount: parseFloat(record.成交股數),
-              tradingPrice: parseFloat(record.成交金額),
+              openPrice: record.開盤價,
+              closePrice: record.收盤價,
+              highestPrice: record.最高價,
+              lowestPrice: record.最低價,
+              priceDiff: record.漲跌價差,
+              tradingVolume: record.成交筆數,
+              transAmount: record.成交股數,
+              tradingPrice: record.成交金額,
             },
           }
         );
         if (typeof resp === 'string' && resp.includes('failed')) {
-          console.error(`${com['code']}${com['name']} + ${resp}`);
+          console.error(`${com['公司代號']}${com['公司簡稱']} + ${resp}`);
           skip = true;
           break;
         }
       }
       console.log(
-        `${com['code']}${com['name']} - ${counter++}/${timestemp.length}`
+        `${com['公司代號']}${com['公司簡稱']} - ${counter++}/${
+          timestemp.length
+        }可獲取的時間段`
       );
       if (skip) break;
     }
