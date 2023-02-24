@@ -4,7 +4,8 @@ import 單日個股歷史資料 from '../model/單日個股歷史資料.inter';
 import graphqlFunc from '../utility/graphql.func';
 import {sleep} from '../utility/httpmethod.mod';
 
-const timestemp = GetTimeStemp('2010', '01'); //時間陣列
+// const timestemp = GetTimeStemp('2010', '01'); //時間陣列
+const timestemp = GetTimeStemp('2023', '02'); //時間陣列
 const companies: {公司代號: string; 公司簡稱: string}[] = []; //公司資料
 try {
   Task();
@@ -13,13 +14,13 @@ try {
 }
 
 export async function Task() {
-  await Task2();
+  await Task1();
   await task3();
   console.log('上市公司資料獲取完成。');
 }
 
 //獲取各股上市總表
-async function Task2() {
+async function Task1() {
   const raw = await graphqlFunc(
     config.GraphQLHost,
     `
@@ -36,7 +37,7 @@ async function Task2() {
   for (const key of coms) {
     companies.push({
       公司代號: key.code,
-      公司簡稱: '',
+      公司簡稱: key.name,
     });
   }
   return;
@@ -53,9 +54,9 @@ async function task3() {
       try {
         records = await entity.GETMonthStockStats(com['公司代號'], timp);
         //prefix name
-        for (const index in records) records[index].證券名稱 = com.公司簡稱;
+        for (const index in records) records[index].證券名稱 = com['公司簡稱'];
       } catch (error) {
-        console.error(`${com['公司代號']}, ${timp} - 獲取失敗`);
+        console.error(`${com['公司代號']}${com['公司簡稱']}, ${timp} - 獲取失敗`);
       }
       let skip = false;
       for (const record of records) {
@@ -116,7 +117,7 @@ async function task3() {
 function GetTimeStemp(sYear: string, sMonth: string): string[] {
   const now = new Date();
   const year = now.getFullYear();
-  const month = now.getMonth();
+  const month = now.getMonth() + 1;
   const result: string[] = [];
   let tmpYear = parseInt(sYear);
   let tmpMonth = parseInt(sMonth);

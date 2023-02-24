@@ -1,4 +1,5 @@
 import 單日個股歷史資料 from '../model/單日個股歷史資料.inter';
+import {GetCurrentDate} from '../utility/date.mod';
 import {GET} from '../utility/httpmethod.mod';
 import {技術面操作_inter} from './technical.inter';
 
@@ -6,16 +7,24 @@ export default class implements 技術面操作_inter {
   async GETTaiwanTodayStats(): Promise<單日個股歷史資料[]> {
     const targetURL =
       'https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL';
-    let raw = await GET(targetURL);
+    let raw: any = await GET(targetURL);
     raw = raw['data'];
     const result: 單日個股歷史資料[] = [];
     for (const key of raw) {
-      const tmp: 單日個股歷史資料 = key;
-      const today = new Date();
-      tmp.日期 =
-        today.getFullYear().toString() +
-        (today.getMonth() + 1).toString() +
-        today.getDate().toString();
+      const tmp: 單日個股歷史資料 = {
+        證券代號: key.Code,
+        證券名稱: key.Name,
+        日期: GetCurrentDate(),
+        成交股數: key.TradeVolume,
+        成交金額: key.TradeValue,
+        開盤價: key.OpeningPrice,
+        最高價: key.HighestPrice,
+        最低價: key.LowestPrice,
+        收盤價: key.ClosingPrice,
+        漲跌價差: key.Change,
+        成交筆數: key.Transaction,
+      };
+
       result.push(tmp);
     }
     return result;

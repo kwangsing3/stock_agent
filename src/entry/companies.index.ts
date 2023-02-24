@@ -9,6 +9,7 @@ try {
 }
 
 export async function Task() {
+  console.log('--獲取公司總表--')
   const raw = await Task2();
   await Task3(raw);
   console.log(`上市公司資料獲取完成 - 總共${raw.length}筆`);
@@ -24,32 +25,36 @@ async function Task2() {
   }
   return result;
 }
-async function Task3(input: 公司基本資訊[]) {
-  if (input.length < 1) return;
-  for (const key of input) {
-    //
-    await graphqlFunc(
-      config.GraphQLHost,
-      `
-        mutation ($input: NewStock!){
-          createStock(input: $input){
-            code
-            name
+async function Task3(compies: 公司基本資訊[]) {
+  const len = compies.length;
+  for (const index in compies) {
+    try {
+      await graphqlFunc(
+        config.GraphQLHost,
+        `
+          mutation ($input: NewStock!){
+            createStock(input: $input){
+              code
+              name
+            }
           }
+        `,
+        {
+          input: {
+            code: compies[index].公司代號,
+            name: compies[index].公司簡稱,
+          },
         }
-      `,
-      {
-        input: {
-          code: key.公司代號,
-          name: key.公司簡稱,
-        },
-      }
-    );
+      );
+    } catch (error) {
+      continue;
+    }
+    console.log(`更新公司資訊 ${compies[index].公司代號}${compies[index].公司簡稱} (${index+1} / ${len})`)
   }
 }
 
 //公司基本資料
-export interface 公司基本資訊 {
+interface 公司基本資訊 {
   出表日期: string;
   公司代號: string;
   公司名稱: string;

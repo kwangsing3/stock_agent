@@ -1,3 +1,5 @@
+import {AxiosError, AxiosResponse} from 'axios';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const axios = require('axios');
 /**
@@ -5,7 +7,7 @@ const axios = require('axios');
  * @param url request path
  * @returns 取得伺服器回應
  */
-export async function GET(url: string): Promise<any> {
+export async function GET(url: string): Promise<AxiosResponse> {
   const config = {
     method: 'get',
     url: url,
@@ -14,16 +16,16 @@ export async function GET(url: string): Promise<any> {
   };
   let data: any = {};
 
-  try {
-    const wait = GetRateLimit();
-    if (wait !== 0) {
-      await sleep(wait);
-    }
-    data = await axios(config);
-    cache = new Date();
-  } catch (error: any) {
-    return error;
+  const wait = GetRateLimit();
+  if (wait !== 0) {
+    await sleep(wait);
   }
+  data = await axios(config);
+  if (data instanceof AxiosError) {
+    throw Error('GET: Source down to mantaince');
+  }
+  cache = new Date();
+
   return data;
 }
 /**
