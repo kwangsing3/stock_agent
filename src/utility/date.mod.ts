@@ -16,3 +16,15 @@ export function NormalizeYear(input: string): string {
     ? input
     : (N + 1911).toString() + '/' + ls[1] + '/' + ls[2];
 }
+
+export function GetCurrentDate(): string {
+  const cur = new Date();
+  const year = cur.getFullYear();
+  const Month =
+    cur.getMonth() + 1 < 10
+      ? `0${cur.getMonth() + 1}`
+      : (cur.getMonth() + 1).toString();
+  const date =
+    cur.getDate() + 1 < 10 ? `0${cur.getDate()}` : cur.getDate().toString();
+  return year + Month + date;
+}
