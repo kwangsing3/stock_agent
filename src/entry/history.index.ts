@@ -56,7 +56,9 @@ async function task3() {
         //prefix name
         for (const index in records) records[index].證券名稱 = com['公司簡稱'];
       } catch (error) {
-        console.error(`${com['公司代號']}${com['公司簡稱']}, ${timp} - 獲取失敗`);
+        console.error(
+          `${com['公司代號']}${com['公司簡稱']}, ${timp} - 獲取失敗`
+        );
       }
       let skip = false;
       for (const record of records) {
