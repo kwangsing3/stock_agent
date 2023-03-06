@@ -5,13 +5,8 @@
     3. .....
 */
 
-import {GetStockByCode} from './service/mongoDbhandler.mod';
-
 async function main() {
   //const ent = new rankMod();
   //await ent.GetTurnOverRank();
-
-  const raw = await GetStockByCode('0050');
-  console.log();
 }
 main();

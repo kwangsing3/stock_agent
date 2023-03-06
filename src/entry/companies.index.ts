@@ -9,7 +9,7 @@ try {
 }
 
 export async function Task() {
-  console.log('--獲取公司總表--')
+  console.log('--獲取公司總表--');
   const raw = await Task2();
   await Task3(raw);
   console.log(`上市公司資料獲取完成 - 總共${raw.length}筆`);
@@ -28,6 +28,7 @@ async function Task2() {
 async function Task3(compies: 公司基本資訊[]) {
   const len = compies.length;
   for (const index in compies) {
+    const key = compies[index];
     try {
       await graphqlFunc(
         config.GraphQLHost,
@@ -41,15 +42,17 @@ async function Task3(compies: 公司基本資訊[]) {
         `,
         {
           input: {
-            code: compies[index].公司代號,
-            name: compies[index].公司簡稱,
+            code: key.公司代號,
+            name: key.公司簡稱,
           },
         }
       );
     } catch (error) {
       continue;
     }
-    console.log(`更新公司資訊 ${compies[index].公司代號}${compies[index].公司簡稱} (${index+1} / ${len})`)
+    console.log(
+      `更新公司資訊 ${key.公司代號}${key.公司簡稱} (${index + 1} / ${len})`
+    );
   }
 }
 
@@ -87,5 +90,4 @@ interface 公司基本資訊 {
   傳真機號碼: string;
   電子郵件信箱: string;
   網址: string;
-  包含歷史資料: string;
 }

@@ -26,6 +26,10 @@ async function Task2() {
   const raw = await entity.GETTaiwanTodayStats();
   let counter = 1;
   for (const key of raw) {
+    await extraProcess({
+      code: key.證券代號,
+      name: key.證券名稱,
+    });
     await graphqlFunc(
       config.GraphQLHost,
       `
@@ -69,3 +73,46 @@ async function Task2() {
 //     //
 //   }
 // }
+
+async function extraProcess(key: {code: string; name: string}) {
+  //
+  let skip = true;
+  try {
+    const raw = await graphqlFunc(
+      config.GraphQLHost,
+      `
+      query {
+        stock(code:${key.code}){
+          code
+          name
+        }
+      }
+    `
+    );
+    const res = raw['data']['data'];
+    const coms: {name: string; code: string}[] = res['stock'];
+    if (coms.length > 1) skip = true;
+  } catch (error: unknown) {
+    skip = false;
+  }
+  //如果沒有獲得公司則新增進公司列表
+  if (!skip) {
+    await graphqlFunc(
+      config.GraphQLHost,
+      `
+        mutation ($input: NewStock!){
+          createStock(input: $input){
+            code
+            name
+          }
+        }
+      `,
+      {
+        input: {
+          code: key.code,
+          name: key.name,
+        },
+      }
+    );
+  }
+}

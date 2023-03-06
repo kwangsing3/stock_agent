@@ -1,6 +1,7 @@
 import technicalImple from '../api/technical.imple';
 import config from '../config';
 import 單日個股歷史資料 from '../model/單日個股歷史資料.inter';
+import {GetCurrentTime} from '../utility/date.mod';
 import graphqlFunc from '../utility/graphql.func';
 import {sleep} from '../utility/httpmethod.mod';
 
@@ -45,18 +46,20 @@ async function Task1() {
 
 async function task3() {
   const entity = new technicalImple();
-
+  let compCounter = 0;
   for (const com of companies) {
     let counter = 1;
     for (const timp of timestemp) {
       let records: 單日個股歷史資料[] = [];
-      await sleep(3 * 1000);
+      await sleep(2 * 1000);
       try {
         records = await entity.GETMonthStockStats(com['公司代號'], timp);
         //prefix name
         for (const index in records) records[index].證券名稱 = com['公司簡稱'];
       } catch (error) {
-        console.error(`${com['公司代號']}${com['公司簡稱']}, ${timp} - 獲取失敗`);
+        console.error(
+          `${com['公司代號']}${com['公司簡稱']}, ${timp} - 獲取失敗`
+        );
       }
       let skip = false;
       for (const record of records) {
@@ -100,12 +103,15 @@ async function task3() {
         }
       }
       console.log(
-        `${com['公司代號']}${com['公司簡稱']} - ${counter++}/${
-          timestemp.length
-        }可獲取的時間段`
+        `${GetCurrentTime()} ${com['公司代號']}${
+          com['公司簡稱']
+        } - ${counter++}/${timestemp.length}可獲取的時間段`
       );
       if (skip) break;
     }
+    console.log(
+      `${com.公司代號}${com.公司簡稱} - ${++compCounter}/${companies.length}`
+    );
   }
 }
 /**
