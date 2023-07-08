@@ -82,6 +82,7 @@ export function Sleep(ms: number): Promise<unknown> {
 */
 let waitRateMS = 0;
 let cache = new Date();
+
 // 一分鐘可接受次數
 export const SetRatePerMin = (ms: number) => {
   waitRateMS = 60000 / ms;

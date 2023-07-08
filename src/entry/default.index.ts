@@ -10,6 +10,7 @@ import {
   GetDBCompany,
   SetUnknowCompany as DB_SetUnknowCompany,
   init,
+  UpsertStockHistory,
 } from '../service/dbhandler.mod';
 import {CloseConnect, ConnectToDB} from '../utility/sql.mod';
 
@@ -23,11 +24,15 @@ import {CloseConnect, ConnectToDB} from '../utility/sql.mod';
     //### 歸類公司紀錄(如果不認識就新增進總表)
     const companysINDB = await GetDBCompany();
     const missCom = FetchUnkownCompany(data, companysINDB); //尋找不認識的公司
-    await DB_SetUnknowCompany(missCom);
-    //2.歸納盤後資料
+    for (const key of missCom) {
+      await DB_SetUnknowCompany(key);
+    }
+    console.log(`新增未追蹤的公司共${missCom.length}項`);
 
-    //### 補正缺少的歷史盤後資訊
-    //TODO: 執行依照公司代號寫入每日的盤後資料進資料庫
+    //###歸納盤後資料, 執行依照公司代號寫入每日的盤後資料進資料庫
+    for (const key of data) {
+      await UpsertStockHistory(key.證券代號, key.日期, key);
+    }
 
     //### 更新其餘統計表
     console.log();

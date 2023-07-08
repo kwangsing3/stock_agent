@@ -1,16 +1,20 @@
 /*
     負責從DB獲取資料或寫入資料
 */
+
 import 公司基本資訊 from '../model/公司基本資訊.inter';
-import {CreateTable, GetContent, Insert, Upsert} from '../utility/sql.mod';
-const DATABASE = 'STOCK_AGENT';
-const COMPANYTABLENAME = 'Company';
+import {CreateTable, GetContent, Upsert} from '../utility/sql.mod';
+const DATABASE_COMPANY = 'STOCK_AGENT_COMPANY';
+const DATABASE_HISTORY = 'STOCK_AGENT_HISTORY';
+const TABLE_COMPANY = 'Company';
 //初始化內容避免錯誤
 export async function init() {
-  await GetContent(`CREATE DATABASE IF NOT EXISTS ${DATABASE}`);
+  await GetContent(`CREATE DATABASE IF NOT EXISTS ${DATABASE_COMPANY}`);
+  await GetContent(`CREATE DATABASE IF NOT EXISTS ${DATABASE_HISTORY}`);
   await CreateComponyTable();
 }
 
+//初始化公司列表
 export async function CreateComponyTable() {
   await CreateTable(
     [
@@ -47,66 +51,205 @@ export async function CreateComponyTable() {
       {name: '電子郵件信箱', type: 'LONGTEXT'},
       {name: '網址', type: 'LONGTEXT'},
     ],
-    DATABASE,
-    COMPANYTABLENAME
+    DATABASE_COMPANY,
+    TABLE_COMPANY
   );
 }
+//獲取公司列表
 export async function GetDBCompany(): Promise<公司基本資訊[]> {
   const raw = await GetContent(`
-      Select * from ${DATABASE}.${COMPANYTABLENAME};
+      Select * from ${DATABASE_COMPANY}.${TABLE_COMPANY};
     `);
   return raw === undefined ? [] : raw;
 }
 
-export async function SetUnknowCompany(
+//輸入未知公司至公司列表
+export async function SetUnknowCompany(key: {
+  證券代號: string;
+  證券名稱: string;
+}) {
+  await GetContent(
+    `Delete from ${DATABASE_COMPANY}.${TABLE_COMPANY} where 公司代號 = "${key['證券代號']}"`
+  );
+  await Upsert(
+    {
+      出表日期: '',
+      公司代號: key.證券代號,
+      公司名稱: '',
+      公司簡稱: key.證券名稱,
+      外國企業註冊地國: '',
+      產業別: '',
+      住址: '',
+      營利事業統一編號: '',
+      董事長: '',
+      總經理: '',
+      發言人: '',
+      發言人職稱: '',
+      代理發言人: '',
+      總機電話: '',
+      成立日期: '',
+      上市日期: '',
+      普通股每股面額: '',
+      實收資本額: '',
+      私募股數: '',
+      特別股: '',
+      編制財務報表類型: '',
+      股票過戶機構: '',
+      過戶電話: '',
+      過戶地址: '',
+      簽證會計師事務所: '',
+      簽證會計師1: '',
+      簽證會計師2: '',
+      英文簡稱: '',
+      英文通訊地址: '',
+      傳真機號碼: '',
+      電子郵件信箱: '',
+      網址: '',
+    },
+    DATABASE_COMPANY,
+    TABLE_COMPANY
+  );
+}
+//獲取沒有詳細資料的公司列表
+export async function GetUnknowCompany(): Promise<公司基本資訊[]> {
+  const raw = await GetContent(`
+    select * from ${DATABASE_COMPANY}.${TABLE_COMPANY} where 公司名稱 = ""
+  ;`);
+  return raw;
+}
+export async function UpsertUnknowCompany(input: 公司基本資訊) {
+  await Upsert(
+    {
+      出表日期: input.出表日期,
+      公司代號: input.公司代號,
+      公司名稱: input.公司名稱,
+      公司簡稱: input.公司簡稱,
+      外國企業註冊地國: input.外國企業註冊地國,
+      產業別: input.產業別,
+      住址: input.住址,
+      營利事業統一編號: input.營利事業統一編號,
+      董事長: input.董事長,
+      總經理: input.總經理,
+      發言人: input.發言人,
+      發言人職稱: input.發言人職稱,
+      代理發言人: input.代理發言人,
+      總機電話: input.總機電話,
+      成立日期: input.成立日期,
+      上市日期: input.上市日期,
+      普通股每股面額: input.普通股每股面額,
+      實收資本額: input.實收資本額,
+      私募股數: input.私募股數,
+      特別股: input.特別股,
+      編制財務報表類型: input.編制財務報表類型,
+      股票過戶機構: input.股票過戶機構,
+      過戶電話: input.過戶電話,
+      過戶地址: input.過戶地址,
+      簽證會計師事務所: input.簽證會計師事務所,
+      簽證會計師1: input.簽證會計師1,
+      簽證會計師2: input.簽證會計師2,
+      英文簡稱: input.英文簡稱,
+      英文通訊地址: input.英文通訊地址,
+      傳真機號碼: input.傳真機號碼,
+      電子郵件信箱: input.電子郵件信箱,
+      網址: input.網址,
+    },
+    DATABASE_COMPANY,
+    TABLE_COMPANY
+  );
+}
+
+export async function UpsertStockHistory(
+  code: string,
+  date: string,
   input: {
     證券代號: string;
     證券名稱: string;
-  }[]
-) {
-  for (const key of input) {
-    await GetContent(
-      `Delete from ${DATABASE}.${COMPANYTABLENAME} where 公司代號 = "${key['證券代號']}"`
-    );
-    await Upsert(
-      {
-        出表日期: '',
-        公司代號: key.證券代號,
-        公司名稱: '',
-        公司簡稱: key.證券名稱,
-        外國企業註冊地國: '',
-        產業別: '',
-        住址: '',
-        營利事業統一編號: '',
-        董事長: '',
-        總經理: '',
-        發言人: '',
-        發言人職稱: '',
-        代理發言人: '',
-        總機電話: '',
-        成立日期: '',
-        上市日期: '',
-        普通股每股面額: '',
-        實收資本額: '',
-        私募股數: '',
-        特別股: '',
-        編制財務報表類型: '',
-        股票過戶機構: '',
-        過戶電話: '',
-        過戶地址: '',
-        簽證會計師事務所: '',
-        簽證會計師1: '',
-        簽證會計師2: '',
-        英文簡稱: '',
-        英文通訊地址: '',
-        傳真機號碼: '',
-        電子郵件信箱: '',
-        網址: '',
-      },
-      DATABASE,
-      COMPANYTABLENAME
-    );
+    日期: string;
+    成交股數: string;
+    成交金額: string;
+    開盤價: string;
+    最高價: string;
+    最低價: string;
+    收盤價: string;
+    漲跌價差: string;
+    成交筆數: string;
   }
-  console.log(`新增未追蹤的公司共${input.length}項`);
+) {
+  await CreateTable(
+    [
+      {name: '證券代號', type: 'LONGTEXT'},
+      {name: '證券名稱', type: 'LONGTEXT'},
+      {name: '日期', type: 'VARCHAR(32) PRIMARY KEY'},
+      {name: '成交股數', type: 'LONGTEXT'},
+      {name: '成交金額', type: 'LONGTEXT'},
+      {name: '開盤價', type: 'LONGTEXT'},
+      {name: '最高價', type: 'LONGTEXT'},
+      {name: '最低價', type: 'LONGTEXT'},
+      {name: '收盤價', type: 'LONGTEXT'},
+      {name: '漲跌價差', type: 'LONGTEXT'},
+      {name: '成交筆數', type: 'LONGTEXT'},
+    ],
+    DATABASE_HISTORY,
+    code
+  );
+  await Upsert(
+    {
+      證券代號: input.證券代號,
+      證券名稱: input.證券名稱,
+      日期: date,
+      成交股數: input.成交股數,
+      成交金額: input.成交金額,
+      開盤價: input.開盤價,
+      最高價: input.最高價,
+      最低價: input.最低價,
+      收盤價: input.收盤價,
+      漲跌價差: input.漲跌價差,
+      成交筆數: input.成交筆數,
+    },
+    DATABASE_HISTORY,
+    code
+  );
+  console.log('更新每日盤後:' + code + '日期:' + date);
 }
-export async function GetUnknowCompany() {}
+
+export async function DB_GETStockHistoryByDate(
+  code: string,
+  date: string
+): Promise<{
+  證券代號: string;
+  證券名稱: string;
+  日期: string;
+  成交股數: string;
+  成交金額: string;
+  開盤價: string;
+  最高價: string;
+  最低價: string;
+  收盤價: string;
+  漲跌價差: string;
+  成交筆數: string;
+}> {
+  const data = await GetContent(`
+    select * from ${DATABASE_HISTORY}.${code} where 日期 = ${date};
+  `);
+  return data;
+}
+export async function DB_GETStockHistory(code: string): Promise<
+  {
+    證券代號: string;
+    證券名稱: string;
+    日期: string;
+    成交股數: string;
+    成交金額: string;
+    開盤價: string;
+    最高價: string;
+    最低價: string;
+    收盤價: string;
+    漲跌價差: string;
+    成交筆數: string;
+  }[]
+> {
+  const data = await GetContent(`
+    select * from ${DATABASE_HISTORY}.${code} ;
+  `);
+  return data;
+}
