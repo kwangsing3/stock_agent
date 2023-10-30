@@ -24,6 +24,7 @@
     "@apollo/client": "^3.7.7",
     "axios": "^1.1.3",
     "html2json": "^1.0.2",
-    "mariadb": "^3.0.2"
+    "mariadb": "^3.0.2",
+    "nodeman": "^1.1.2"
   }
 }

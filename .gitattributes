@@ -1,0 +1,2 @@
+# 限制換行符
+*.ts text eol=lf

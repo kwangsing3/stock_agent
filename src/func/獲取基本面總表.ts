@@ -118,7 +118,7 @@ async function postCompareDataMopsfin(
 ) {
   const host = 'https://mopsfin.twse.com.tw/compare/data';
   const query = `compareItem=${swi}&quarter=true&ylabel=%2&ys=${Yseason}5&revenue=true&bcodeAvg=true&companyAvg=false&companyId=${stockid}`;
-  const raw = await POST(host, query, {});
+  const raw = await POST(host, query);
   let result = raw['data']['json'];
   result = JSON.parse(raw['data']['json']);
   return result;
@@ -131,7 +131,7 @@ async function postCompareReportMopsfin(
 ): Promise<any> {
   const requURL = 'https://mopsfin.twse.com.tw/compare/report';
   const query = `compareItem=${swi}&quarter=true&ys=${Yseason}&revenue=true&bcodeAvg=true&companyAvg=true&companyId=${stockid}`;
-  const raw = await POST(requURL, query, {});
+  const raw = await POST(requURL, query);
   let st: string = raw['data'];
   st = st.replace(new RegExp('\\r', 'g'), '');
   st = st.replace(new RegExp('\\n', 'g'), '');
