@@ -1,19 +1,16 @@
-import axios, {
-  AxiosRequestConfig,
-  AxiosRequestHeaders,
-  AxiosResponse,
-} from 'axios';
+import axios from 'axios';
+
 /**
  * GET method
  * @param url request path
  * @returns 取得伺服器回應
  */
 export async function GET(
-  url: string,
-  header?: AxiosRequestHeaders,
-  timeout?: number
-): Promise<AxiosResponse> {
-  const config: AxiosRequestConfig = {
+  url,
+  header={},
+  timeout=15000
+) {
+  const config = {
     method: 'get',
     url: url,
     headers: header === undefined ? {} : header,
@@ -29,7 +26,7 @@ export async function GET(
     }
     data = await axios(config);
     cache = new Date();
-  } catch (error: unknown) {
+  } catch (error) {
     console.log(error);
     throw error;
   }
@@ -42,12 +39,12 @@ export async function GET(
  * @returns 取決於伺服器實作，可能不會出現回傳。
  */
 export async function POST(
-  url: string,
-  content: unknown,
-  header?: AxiosRequestHeaders,
-  timeout?: number
-): Promise<AxiosResponse> {
-  const config: AxiosRequestConfig = {
+  url,
+  content,
+  header,
+  timeout
+) {
+  const config = {
     method: 'post',
     url: url,
     data: content,
@@ -63,14 +60,14 @@ export async function POST(
     }
     data = await axios(config);
     cache = new Date();
-  } catch (error: unknown) {
+  } catch (error) {
     console.log(error);
     throw error;
   }
   return data;
 }
 
-export function Sleep(ms: number): Promise<unknown> {
+export function Sleep(ms = 0) {
   return new Promise(resolve => {
     setTimeout(resolve, ms);
   });
@@ -84,7 +81,7 @@ let waitRateMS = 0;
 let cache = new Date();
 
 // 一分鐘可接受次數
-export const SetRatePerMin = (ms: number) => {
+export const SetRatePerMin = (ms = 0) => {
   waitRateMS = 60000 / ms;
 };
 

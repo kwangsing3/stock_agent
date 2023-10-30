@@ -1,6 +1,6 @@
 import * as mariadb from 'mariadb';
 
-let pool: mariadb.Pool;
+let pool = undefined;
 
 /**
  * 連接至SQL資料庫
@@ -10,10 +10,10 @@ let pool: mariadb.Pool;
  * @param db
  */
 export function ConnectToDB(
-  host: string,
-  user: string,
-  password: string,
-  db: string
+  host = '',
+  user = '',
+  password = '',
+  db = ''
 ) {
   try {
     pool = mariadb.createPool({
@@ -34,7 +34,7 @@ export function ConnectToDB(
  * @param query SQL命令
  * @returns 資料內容
  */
-export async function GetContent(query: string) {
+export async function GetContent(query = '') {
   const conn = await pool.getConnection();
   if (conn) {
     conn.end();
@@ -49,7 +49,7 @@ export async function GetContent(query: string) {
  * 關閉與資料庫的連線
  */
 export async function CloseConnect() {
-  await pool.end().catch((err: unknown) => {
+  await pool.end().catch((err) => {
     throw err;
   });
 }
@@ -61,9 +61,9 @@ export async function CloseConnect() {
  * @param database
  */
 export async function CreateTable(
-  input: {name: string; type: string}[],
-  database: string,
-  tableName: string
+  input,
+  database = '',
+  tableName = ''
 ) {
   let volume = '';
   for (let index = 0; index < input.length; index++) {
@@ -87,9 +87,9 @@ export async function CreateTable(
  * @param database
  */
 export async function Upsert(
-  content: Object,
-  database: string,
-  tableName: string
+  content,
+  database = '',
+  tableName = ''
 ) {
   const keylist = Object.keys(content);
   const valuelist = Object.values(content);
@@ -125,9 +125,9 @@ export async function Upsert(
 }
 
 export async function Insert(
-  content: Object,
-  tableName: string,
-  database: string
+  content,
+  tableName = '',
+  database = ''
 ) {
   const keylist = Object.keys(content);
   let value = '';
@@ -153,9 +153,9 @@ export async function Insert(
  * @param database
  */
 export async function ForceUpsert(
-  content: Object,
-  database: string,
-  tableName: string
+  content,
+  database = '',
+  tableName = ''
 ) {
   const keylist = Object.keys(content);
   let hasKey = false; //有沒有指定主鍵

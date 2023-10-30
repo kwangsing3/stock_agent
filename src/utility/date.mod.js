@@ -3,7 +3,7 @@
  * @param input 例如: "111/2/29"
  * @returns "2022/2/29"
  */
-export function NormalizeYear(input: string): string {
+export function NormalizeYear(input='') {
   if ((input.match(/\//g) || []).length < 2) return '';
   const ls = input.split('/');
   let N = 0;
@@ -17,7 +17,7 @@ export function NormalizeYear(input: string): string {
     : (N + 1911).toString() + '/' + ls[1] + '/' + ls[2];
 }
 
-export function GetCurrentDate(): string {
+export function GetCurrentDate() {
   const cur = new Date();
   const year = cur.getFullYear();
   const Month =
@@ -29,7 +29,7 @@ export function GetCurrentDate(): string {
   return year + Month + date;
 }
 
-export function GetCurrentTime(): string {
+export function GetCurrentTime() {
   const cur = new Date();
   const year = cur.getFullYear();
   const Month =

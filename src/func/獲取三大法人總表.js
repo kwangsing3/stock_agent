@@ -2,13 +2,13 @@ import {GET} from '../utility/httpmethod';
 
 //三大法人進出總表
 export default async function GETThreeGiantAssest(
-  date: string
-): Promise<公司籌碼面[]> {
+  date
+) {
   const host = 'https://www.twse.com.tw';
   const urls = `${host}/fund/T86?date=${date}`;
   const raw = await GET(urls);
   const sample = raw['data'];
-  const result: 公司籌碼面[] = [];
+  const result = [];
   for (const key of sample['data']) {
     result.push({
       證券代號: key[0],

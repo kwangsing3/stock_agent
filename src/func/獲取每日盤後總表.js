@@ -1,38 +1,12 @@
-import {GetCurrentDate} from '../utility/date.mod';
-import {GET} from '../utility/httpmethod';
+import {GetCurrentDate} from '../utility/date.mod.js';
+import {GET} from '../utility/httpmethod.js';
 
 //獲取當日盤後資料總表
-export async function GETDailyStats(): Promise<
-  {
-    證券代號: string;
-    證券名稱: string;
-    日期: string;
-    成交股數: string;
-    成交金額: string;
-    開盤價: string;
-    最高價: string;
-    最低價: string;
-    收盤價: string;
-    漲跌價差: string;
-    成交筆數: string;
-  }[]
-> {
+export async function GETDailyStats(){
   const targetURL =
     'https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL';
   const raw = (await GET(targetURL))['data'];
-  const result: {
-    證券代號: string;
-    證券名稱: string;
-    日期: string;
-    成交股數: string;
-    成交金額: string;
-    開盤價: string;
-    最高價: string;
-    最低價: string;
-    收盤價: string;
-    漲跌價差: string;
-    成交筆數: string;
-  }[] = [];
+  const result = [];
   for (const key of raw) {
     result.push({
       證券代號: key.Code,

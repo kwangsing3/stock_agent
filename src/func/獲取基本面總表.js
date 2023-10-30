@@ -78,25 +78,11 @@ import * as json2html from 'html2json';
  * @param date
  * @returns
  */
-export default async function GETAllTaiwanStockYield(date: string): Promise<
-  {
-    證券代號: string;
-    證券名稱: string;
-    本益比: string;
-    殖利率: string;
-    股價淨值比: string;
-  }[]
-> {
+export default async function GETAllTaiwanStockYield(date) {
   const urls = `https://www.twse.com.tw/exchangeReport/BWIBBU_d?response=json&date=${date}&selectType=ALL`;
   const raw = await GET(urls);
   const sample = raw['data'];
-  const res: {
-    證券代號: string;
-    證券名稱: string;
-    本益比: string;
-    殖利率: string;
-    股價淨值比: string;
-  }[] = [];
+  const res = [];
   for (const key of sample['data']) {
     const tmp = {
       證券代號: key[0],
@@ -112,9 +98,9 @@ export default async function GETAllTaiwanStockYield(date: string): Promise<
 
 //特定來源的獲取資料公式
 async function postCompareDataMopsfin(
-  swi: string,
-  stockid: string,
-  Yseason: string
+  swi,
+  stockid,
+  Yseason
 ) {
   const host = 'https://mopsfin.twse.com.tw/compare/data';
   const query = `compareItem=${swi}&quarter=true&ylabel=%2&ys=${Yseason}5&revenue=true&bcodeAvg=true&companyAvg=false&companyId=${stockid}`;
@@ -125,17 +111,17 @@ async function postCompareDataMopsfin(
 }
 //特定來源的獲取資料公式
 async function postCompareReportMopsfin(
-  swi: string,
-  stockid: string,
-  Yseason: string
-): Promise<any> {
+  swi,
+  stockid,
+  Yseason
+) {
   const requURL = 'https://mopsfin.twse.com.tw/compare/report';
   const query = `compareItem=${swi}&quarter=true&ys=${Yseason}&revenue=true&bcodeAvg=true&companyAvg=true&companyId=${stockid}`;
   const raw = await POST(requURL, query);
-  let st: string = raw['data'];
+  let st = raw['data'];
   st = st.replace(new RegExp('\\r', 'g'), '');
   st = st.replace(new RegExp('\\n', 'g'), '');
-  const json: any = json2html.html2json(st);
+  const json = json2html.html2json(st);
   let arr_tmp = json['child'][3]['child'];
   arr_tmp = arr_tmp[3]['child'];
   arr_tmp = arr_tmp[1]['child'];
@@ -153,8 +139,8 @@ async function postCompareReportMopsfin(
   arr_tmp = arr_tmp[1]['child'];
   arr_tmp = arr_tmp[1]['child'];
   arr_tmp = arr_tmp[3]['child'];
-  const result: any = {};
-  const assestList: string[] = [];
+  const result = {};
+  const assestList = [];
   for (const key of arr_tmp) {
     if (key['node'] === 'text') continue;
     let tar = key['child'][1]['child'][0]['text'];

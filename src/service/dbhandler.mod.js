@@ -56,18 +56,22 @@ export async function CreateComponyTable() {
   );
 }
 //獲取公司列表
-export async function GetDBCompany(): Promise<公司基本資訊[]> {
+export async function GetDBCompany() {
   const raw = await GetContent(`
       Select * from ${DATABASE_COMPANY}.${TABLE_COMPANY};
     `);
   return raw === undefined ? [] : raw;
 }
 
-//輸入未知公司至公司列表
-export async function SetUnknowCompany(key: {
-  證券代號: string;
-  證券名稱: string;
-}) {
+/**
+ * 輸入未知公司至公司列表
+ * @param {*} key
+ * {
+ *    證券代號: string;
+ *    證券名稱: string;
+ * }
+ */
+export async function SetUnknowCompany(key) {
   await GetContent(
     `Delete from ${DATABASE_COMPANY}.${TABLE_COMPANY} where 公司代號 = "${key['證券代號']}"`
   );
@@ -111,13 +115,17 @@ export async function SetUnknowCompany(key: {
   );
 }
 //獲取沒有詳細資料的公司列表
-export async function GetUnknowCompany(): Promise<公司基本資訊[]> {
+export async function GetUnknowCompany() {
   const raw = await GetContent(`
     select * from ${DATABASE_COMPANY}.${TABLE_COMPANY} where 公司名稱 = ""
   ;`);
   return raw;
 }
-export async function UpsertUnknowCompany(input: 公司基本資訊) {
+/**
+ * 
+ * @param {公司基本資訊} input 
+ */
+export async function UpsertUnknowCompany(input) {
   await Upsert(
     {
       出表日期: input.出表日期,
@@ -157,11 +165,12 @@ export async function UpsertUnknowCompany(input: 公司基本資訊) {
     TABLE_COMPANY
   );
 }
-
-export async function UpsertStockHistory(
-  code: string,
-  date: string,
-  input: {
+/**
+ * 
+ * @param {*} code 
+ * @param {*} date 
+ * @param {*} input 
+ * {
     證券代號: string;
     證券名稱: string;
     日期: string;
@@ -174,6 +183,11 @@ export async function UpsertStockHistory(
     漲跌價差: string;
     成交筆數: string;
   }
+ */
+export async function UpsertStockHistory(
+  code='',
+  date = '',
+  input
 ) {
   await CreateTable(
     [
@@ -213,41 +227,15 @@ export async function UpsertStockHistory(
 }
 
 export async function DB_GETStockHistoryByDate(
-  code: string,
-  date: string
-): Promise<{
-  證券代號: string;
-  證券名稱: string;
-  日期: string;
-  成交股數: string;
-  成交金額: string;
-  開盤價: string;
-  最高價: string;
-  最低價: string;
-  收盤價: string;
-  漲跌價差: string;
-  成交筆數: string;
-}> {
+  code= '',
+  date= ''
+) {
   const data = await GetContent(`
     select * from ${DATABASE_HISTORY}.${code} where 日期 = ${date};
   `);
   return data;
 }
-export async function DB_GETStockHistory(code: string): Promise<
-  {
-    證券代號: string;
-    證券名稱: string;
-    日期: string;
-    成交股數: string;
-    成交金額: string;
-    開盤價: string;
-    最高價: string;
-    最低價: string;
-    收盤價: string;
-    漲跌價差: string;
-    成交筆數: string;
-  }[]
-> {
+export async function DB_GETStockHistory(code= '') {
   const data = await GetContent(`
     select * from ${DATABASE_HISTORY}.${code} ;
   `);

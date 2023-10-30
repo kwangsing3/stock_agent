@@ -2,44 +2,18 @@ import {GET} from '../utility/httpmethod';
 
 //獲取一周個股歷史資料
 export default async function GETStockHistorysWeek(
-  code: string,
-  date: string
-): Promise<
-  {
-    證券代號: string;
-    證券名稱: string;
-    日期: string;
-    成交股數: string;
-    成交金額: string;
-    開盤價: string;
-    最高價: string;
-    最低價: string;
-    收盤價: string;
-    漲跌價差: string;
-    成交筆數: string;
-  }[]
-> {
+  code,
+  date
+){
   const targetURL = `https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=${date}&stockNo=${code}`;
   const raw = (await GET(targetURL))['data'];
-  const res: {
-    證券代號: string;
-    證券名稱: string;
-    日期: string;
-    成交股數: string;
-    成交金額: string;
-    開盤價: string;
-    最高價: string;
-    最低價: string;
-    收盤價: string;
-    漲跌價差: string;
-    成交筆數: string;
-  }[] = [];
+  const res = [];
   const title = raw?.['title'];
   const stName = title.split(' ')[2];
 
   for (const key of raw['data']) {
     //prefix date
-    const date_spli: string[] = key[0].split('/');
+    const date_spli = key[0].split('/');
     const year = (parseInt(date_spli[0]) + 1911).toString();
     res.push({
       證券代號: code,
