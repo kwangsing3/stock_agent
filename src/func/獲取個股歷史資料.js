@@ -1,4 +1,4 @@
-import {GET} from '../utility/httpmethod';
+import {GET} from '../utility/httpmethod.js';
 
 //獲取一周個股歷史資料
 export default async function GETStockHistorysWeek(

@@ -1,5 +1,4 @@
-import { GETDailyStats } from "./func/獲取每日盤後總表.js";
-
+import dailyMod from "../module/daily/daily.js";
 /*
   src/entry/*.index.js
     1. 獲取每日盤後資料
@@ -7,16 +6,7 @@ import { GETDailyStats } from "./func/獲取每日盤後總表.js";
     3. .....
 */
 (async ()=>{
-  
-  //
-  //
-  //
-  const raw = await GETDailyStats();
-  console.log(raw)
-  //
-  //
-  //
-  //
+  await dailyMod();
 })().catch((err)=>{
   console.error(err);
 });

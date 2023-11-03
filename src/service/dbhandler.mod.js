@@ -2,8 +2,7 @@
     負責從DB獲取資料或寫入資料
 */
 
-import 公司基本資訊 from '../model/公司基本資訊.inter';
-import {CreateTable, GetContent, Upsert} from '../utility/sql.mod';
+import {CreateTable, GetContent, Upsert} from '../utility/sql.mod.js';
 const DATABASE_COMPANY = 'STOCK_AGENT_COMPANY';
 const DATABASE_HISTORY = 'STOCK_AGENT_HISTORY';
 const TABLE_COMPANY = 'Company';
