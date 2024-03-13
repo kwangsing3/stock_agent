@@ -27,6 +27,7 @@ export function ConnectToDB(
   } catch (error) {
     console.log(`無法使用DBhandler服務:${error}`);
   }
+  console.log("---連結DB資料庫")
 }
 
 /**
@@ -79,6 +80,7 @@ export async function CreateTable(
   ) CHARACTER SET utf8 COLLATE utf8_general_ci;
   `;
   await GetContent(query);
+  console.log("Create Table "+ tableName)
 }
 /**
  * 如果沒有則插入，依照主key為索引更新資料表。  如果結構與表不同(無論增減)，則報錯。

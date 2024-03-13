@@ -54,13 +54,6 @@ export async function CreateComponyTable() {
     TABLE_COMPANY
   );
 }
-//獲取公司列表
-export async function GetDBCompany() {
-  const raw = await GetContent(`
-      Select * from ${DATABASE_COMPANY}.${TABLE_COMPANY};
-    `);
-  return raw === undefined ? [] : raw;
-}
 
 /**
  * 輸入未知公司至公司列表
