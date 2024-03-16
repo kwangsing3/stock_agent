@@ -10,9 +10,7 @@
   "license": "Apache-2.0",
   "keywords": [],
   "scripts": {
-    "dailystats": "node src/entry/updateDailyStats.js",
-    "companyinfo": "node src/entry/updateCompanies.js",
-    "history": "node src/entry/updateStockHistory.js"
+    "start": "node src/entry/daily.index.js"
   },
   "dependencies": {
     "axios": "^1.6.7",

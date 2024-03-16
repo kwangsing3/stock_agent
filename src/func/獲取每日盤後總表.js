@@ -1,13 +1,13 @@
-import {GetCurrentDate} from '../utility/date.mod.js';
-import {GET} from '../utility/httpmethod.js';
+import { GetCurrentDate } from '../utility/date.mod.js';
+import { GET } from '../utility/httpmethod.js';
 
 //獲取當日盤後資料總表
-export async function GETDailyStats(){
+export async function GETDailyStats() {
   const targetURL =
     'https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL';
   const raw = (await GET(targetURL))['data'];
   const result = [];
-  for (const key of raw) {
+  raw.foreach(key => {
     result.push({
       證券代號: key.Code,
       證券名稱: key.Name,
@@ -21,7 +21,7 @@ export async function GETDailyStats(){
       漲跌價差: key.Change,
       成交筆數: key.Transaction,
     });
-  }
+  });
   return result;
 }
 /**
@@ -38,4 +38,4 @@ export async function GETDailyStats(){
   漲跌價差: string;
   成交筆數: string;
 }
- */
+*/
