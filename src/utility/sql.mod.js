@@ -68,9 +68,8 @@ export async function CreateTable(
 ) {
   let volume = '';
   for (let index = 0; index < input.length; index++) {
-    volume += ` ${input[index].name} ${input[index].type}${
-      index === input.length - 1 ? '' : ','
-    }
+    volume += ` ${input[index].name} ${input[index].type}${index === input.length - 1 ? '' : ','
+      }
     `;
   }
   const query = `
@@ -80,7 +79,7 @@ export async function CreateTable(
   ) CHARACTER SET utf8 COLLATE utf8_general_ci;
   `;
   await GetContent(query);
-  console.log("Create Table "+ tableName)
+  console.log("Create Table " + tableName)
 }
 /**
  * 如果沒有則插入，依照主key為索引更新資料表。  如果結構與表不同(無論增減)，則報錯。
@@ -109,9 +108,8 @@ export async function Upsert(
   let update = '';
   for (let index = 0; index < keylist.length; index++) {
     const ele = valuelist[index];
-    update += `${keylist[index]}=${
-      typeof ele === 'string' ? '"' + ele + '"' : ele
-    }`;
+    update += `${keylist[index]}=${typeof ele === 'string' ? '"' + ele + '"' : ele
+      }`;
     if (index !== keylist.length - 1) update += ',\n';
   }
   //
@@ -128,18 +126,19 @@ export async function Upsert(
 
 export async function Insert(
   content,
+  database = '',
   tableName = '',
-  database = ''
 ) {
   const keylist = Object.keys(content);
   let value = '';
   for (let index = 0; index < keylist.length; index++) {
-    const ele = keylist[index];
+    const ele = content[keylist[index]];
     value += typeof ele === 'string' ? `"${ele}"` : `${ele}`;
     if (index !== keylist.length - 1) value += ',\n';
   }
   const query = `
   INSERT INTO ${database}.${tableName}
+    (${keylist.toString()})
     VALUES(
       ${value}
     )

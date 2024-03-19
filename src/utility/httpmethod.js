@@ -7,8 +7,8 @@ import axios from 'axios';
  */
 export async function GET(
   url,
-  header={},
-  timeout=15000
+  header = {},
+  timeout = 15000
 ) {
   const config = {
     method: 'get',
@@ -66,7 +66,11 @@ export async function POST(
   }
   return data;
 }
-
+/**
+ * 暫停執行緒 (毫秒)
+ * @param {*} ms 
+ * @returns 
+ */
 export function Sleep(ms = 0) {
   return new Promise(resolve => {
     setTimeout(resolve, ms);

@@ -4,7 +4,7 @@ const DATABASE_COMPANY = 'STOCK_AGENT_COMPANY';
 const TABLE_COMPANY = 'Company';
 
 //獲取公司列表
-export default async () => {
+export async function GetDBCompany() {
   const raw = await GetContent(`
       Select * from ${DATABASE_COMPANY}.${TABLE_COMPANY};
     `);

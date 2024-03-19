@@ -7,7 +7,7 @@ export async function GETDailyStats() {
     'https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL';
   const raw = (await GET(targetURL))['data'];
   const result = [];
-  raw.foreach(key => {
+  raw.forEach(key => {
     result.push({
       證券代號: key.Code,
       證券名稱: key.Name,
