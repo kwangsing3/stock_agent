@@ -3,10 +3,11 @@ import { GetDBCompany } from "../database/getDBCompany.func.js";
 import { GetTimeStemp } from "../utility/date.mod.js";
 import { Sleep } from "../utility/httpmethod.js";
 import { GetContent } from "../utility/sql.mod.js";
-import { GETStockReordsMonthly } from "./獲取個股歷史資料.js";
+import { GETStockReordsMonthly } from "./獲取個股交易歷史.js";
 
 //(算日期 -> 比對該日期沒有資料的公司 -> 算完再走下一月)
 export async function Process() {
+
     const timest = GetTimeStemp("2010", "01");
     const Companies = await GetDBCompany()
     for (const tdate of timest) {
@@ -17,11 +18,7 @@ export async function Process() {
         const theoryShouldHas = Companies.length * range.length;
         const localRecordHas = records.length;
         if (theoryShouldHas === localRecordHas) continue;
-        //
-        //
-        //
         //刪除紀錄後重新獲取
-
         for (const ii of Companies) {
             const code = ii?.公司代號;
             if (code === undefined) continue;
