@@ -16,9 +16,6 @@ import { GetDBCompany } from '../database/getDBCompany.func.js'
   await ConnectToDB('localhost', 'root', 'manager1', '')
   1; //### 固定初始話資料庫表單
   await DBinit();
-
-  await Process();
-  return
   2; //### 獲取每天盤後資料
   const companysINDB = await GetDBCompany();
   const data = await GETDailyStats();

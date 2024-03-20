@@ -1,14 +1,23 @@
 import { GET } from '../utility/httpmethod.js';
-
+let codelist = [];
 //獲取一周個股歷史資料
 export async function GETStockReordsMonthly(
   code,
   date
 ) {
   try {
+    //
+    codelist.forEach(element => {
+      if (element === code) {
+        return []; //early out 如果太久之前的資料沒有的話就不需要繼續問下去了
+      }
+    });
     const targetURL = `https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=${date}&stockNo=${code}`;
     const raw = (await GET(targetURL))['data'];
-    if (raw['state'] !== undefined && raw['state'].includes("沒有符合條件的資料")) return [];
+    if (raw['state'] !== undefined && raw['state'].includes("沒有符合條件的資料")) {
+      codelist.push(code)
+      return [];
+    }
     const res = [];
     const title = raw?.['title'];
     const stName = title.split(' ')[2];

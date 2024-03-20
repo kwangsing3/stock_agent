@@ -1,84 +1,13 @@
-import {GET, POST} from '../utility/httpmethod';
+import { GET, POST } from '../utility/httpmethod';
 import * as json2html from 'html2json';
 
-// /**
-// 個股綜合損益表
-// * @param stockid 個股代號
-// * @param Yseason 年度季別，例如：20154
-// * @returns JSON
-// */
-// async function GETTaiwanStockFinancialStatements(
-//   stockid: string,
-//   Yseason: string
-// ): Promise<個股綜合損益表> {
-//   return postCompareReportMopsfin('IncomeStatement', stockid, Yseason);
-// }
-
-// /**
-// 個股現金流量表
-// * @param stockid 個股代號
-// * @param Yseason 年度季別，例如：20154
-// * @returns JSON
-// */
-// async function GETTaiwanCashFlowsStatement(
-//   stockid: string,
-//   Yseason: string
-// ): Promise<個股現金流量表> {
-//   return postCompareReportMopsfin('CashflowStatement', stockid, Yseason);
-// }
-
-// /**
-// 獲取個股資產負債表
-// * @param stockid 個股代號
-// * @param Yseason 年度季別，例如：20154
-// * @returns JSON
-// */
-// async function GETTaiwanStockBalanceSheet(
-//   stockid: string,
-//   Yseason: string
-// ): Promise<個股資產負債表> {
-//   return postCompareReportMopsfin('BalanceSheet', stockid, Yseason);
-// }
-// //#endregion
-// //#region  綜合損益趨勢
-// /**
-//  * 獲取營業收入
-//  * @param stockid
-//  * @param Yseason
-//  * @returns
-//  */
-// async function GETTaiwanRevenue(stockid: string, Yseason: string): Promise<GraphData> {
-//   return postCompareDataMopsfin('Revenue', stockid, Yseason);
-// }
-
-// /**
-//  * 個股股本
-//  * @param stockid
-//  * @param Yseason
-//  * @returns
-//  */
-// async function GETTaiwanCommonStock(
-//   stockid: string,
-//   Yseason: string
-// ): Promise<GraphData> {
-//   return postCompareDataMopsfin('CommonStock', stockid, Yseason);
-// }
-// //#endregion
-
-// /*個股年營業收入年增率*/
-// async function GETTaiwanStockYearRevenue(
-//   stockid: string,
-//   Yseason: string
-// ): Promise<GraphData> {
-//   return postCompareDataMopsfin('RevenueYOY', stockid, Yseason);
-// }
 
 /**
  * 獲取全部殖利率，本益比，股價淨值比。
  * @param date
  * @returns
  */
-export default async function GETAllTaiwanStockYield(date) {
+export async function GETAllTaiwanStockYield(date) {
   const urls = `https://www.twse.com.tw/exchangeReport/BWIBBU_d?response=json&date=${date}&selectType=ALL`;
   const raw = await GET(urls);
   const sample = raw['data'];

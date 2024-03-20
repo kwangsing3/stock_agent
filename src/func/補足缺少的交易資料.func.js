@@ -17,12 +17,9 @@ export async function Process() {
         const theoryShouldHas = Companies.length * range.length;
         const localRecordHas = records.length;
         if (theoryShouldHas === localRecordHas) continue;
-
         //
         //
         //
-
-
         //刪除紀錄後重新獲取
 
         for (const ii of Companies) {
