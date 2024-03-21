@@ -7,7 +7,6 @@ import { GETStockReordsMonthly } from "./獲取個股交易歷史.js";
 
 //(算日期 -> 比對該日期沒有資料的公司 -> 算完再走下一月)
 export async function Process() {
-
     const timest = GetTimeStemp("2010", "01");
     const Companies = await GetDBCompany()
     for (const tdate of timest) {

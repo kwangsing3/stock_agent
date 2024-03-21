@@ -65,6 +65,23 @@ export default async function DBinit() {
         { name: "最近一次申報每股淨值", type: "LONGTEXT" },
         { name: "最近一次申報每股盈餘", type: "LONGTEXT" },
     ], DATABASE_HISTORY, "yields");
+    //新增每月營收
+    await CreateTable([
+        { name: "id", type: "INT NOT NULL AUTO_INCREMENT PRIMARY KEY" },
+        { name: "公司代號", type: "VARCHAR(32)", },
+        { name: "年度", type: "LONGTEXT", },
+        { name: "月份", type: "LONGTEXT", },
+        { name: "本月營收", type: "LONGTEXT", },
+        { name: "去年同期", type: "LONGTEXT", },
+        { name: "本月增減金額", type: "LONGTEXT", },
+        { name: "本月增減百分比", type: "LONGTEXT", },
+        { name: "本年累計", type: "LONGTEXT", },
+        { name: "去年累計", type: "LONGTEXT", },
+        { name: "去年增減金額", type: "LONGTEXT", },
+        { name: "去年增減百分比", type: "LONGTEXT", },
+        { name: "營收變化原因說明", type: "LONGTEXT", },
+    ], DATABASE_HISTORY, "financial");
+
 }
 
 

@@ -13,10 +13,12 @@
     "start": "node src/entry/daily.index.js"
   },
   "dependencies": {
+    "@xmldom/xmldom": "^0.8.10",
     "axios": "^1.6.7",
     "html2json": "^1.0.2",
     "mariadb": "^3.0.2",
-    "nodeman": "^1.1.2"
+    "nodeman": "^1.1.2",
+    "xpath": "^0.0.34"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

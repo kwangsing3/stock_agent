@@ -62,20 +62,6 @@ export default async function UpsertStockHistory(
         "records",
       );
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     console.log('新增交易紀錄:' + code + '日期:' + date);
   }
 }
