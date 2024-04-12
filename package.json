@@ -10,7 +10,8 @@
   "license": "Apache-2.0",
   "keywords": [],
   "scripts": {
-    "start": "node src/entry/daily.index.js"
+    "start": "node src/entry/daily.index.js",
+    "yield": "node src/entry/yields.index.js"
   },
   "dependencies": {
     "@xmldom/xmldom": "^0.8.10",

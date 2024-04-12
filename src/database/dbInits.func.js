@@ -51,15 +51,13 @@ export default async function DBinit() {
     //新增除權息紀錄
     await CreateTable([
         { name: "id", type: "INT NOT NULL AUTO_INCREMENT PRIMARY KEY" },
-        { name: "資料日期", type: "LONGTEXT" },
+        { name: "除權息日期", type: "LONGTEXT" },
         { name: "股票代號", type: "VARCHAR(32)" },
         { name: "股票名稱", type: "LONGTEXT" },
         { name: "除權息前收盤價", type: "LONGTEXT" },
         { name: "除權息參考價", type: "LONGTEXT" },
         { name: "權值息值", type: "LONGTEXT" },
         { name: "權息", type: "LONGTEXT" },
-        { name: "漲停價格", type: "LONGTEXT" },
-        { name: "跌停價格", type: "LONGTEXT" },
         { name: "開盤競價基準", type: "LONGTEXT" },
         { name: "減除股利參考價", type: "LONGTEXT" },
         { name: "最近一次申報每股淨值", type: "LONGTEXT" },

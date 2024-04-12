@@ -6,7 +6,7 @@
     "configurations": [
         {
             "name": "Launch Program",
-            "program": "${workspaceFolder}/src/entry/sandbox.index.js",
+            "program": "${workspaceFolder}/src/entry/yields.index.js",
             "request": "launch",
             "skipFiles": [
                 "<node_internals>/**"
