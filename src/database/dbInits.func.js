@@ -48,6 +48,22 @@ export default async function DBinit() {
         { name: "漲跌價差", type: "LONGTEXT" },
         { name: "成交筆數", type: "LONGTEXT" },
     ], DATABASE_HISTORY, "records");
+    //新增每日收盤紀錄，只記錄當天
+    await CreateTable([
+        { name: "id", type: "INT NOT NULL AUTO_INCREMENT PRIMARY KEY" },
+        { name: "證券代號", type: "VARCHAR(32)" },
+        { name: "證券名稱", type: "LONGTEXT" },
+        { name: "日期", type: "VARCHAR(32)" },
+        { name: "成交股數", type: "LONGTEXT" },
+        { name: "成交金額", type: "LONGTEXT" },
+        { name: "開盤價", type: "LONGTEXT" },
+        { name: "最高價", type: "LONGTEXT" },
+        { name: "最低價", type: "LONGTEXT" },
+        { name: "收盤價", type: "LONGTEXT" },
+        { name: "漲跌價差", type: "LONGTEXT" },
+        { name: "成交筆數", type: "LONGTEXT" },
+    ], DATABASE_HISTORY, "current");
+    await GetContent(`TRUNCATE ${DATABASE_HISTORY}.current;`);
     //新增除權息紀錄
     await CreateTable([
         { name: "id", type: "INT NOT NULL AUTO_INCREMENT PRIMARY KEY" },

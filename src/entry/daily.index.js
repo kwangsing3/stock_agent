@@ -5,6 +5,7 @@ import SetUnknowCompany from '../database/SetUnknowCompany.func.js'
 import UpsertStockHistory from '../database/UpsertStockHistory.func.js'
 import { Process } from '../func/補足缺少的交易資料.func.js'
 import { GetDBCompany } from '../database/getDBCompany.func.js'
+import updateCurrentPriceFunc from '../database/updateCurrentPrice.func.js'
 /*
     腳本邏輯:
     獲取每天盤後資料 -> 歸類公司紀錄(如果不認識就新增進總表) -> 補正缺少的歷史盤後資訊 -> 更新其餘統計表
@@ -23,7 +24,8 @@ import { GetDBCompany } from '../database/getDBCompany.func.js'
   for (const key of missCom) await SetUnknowCompany(key)
   console.log(`新增未追蹤的公司共${missCom.length}項`);
   //###歸納盤後資料, 執依照公司代號寫入每日的盤後資料進資料庫
-  for (const key of data) await UpsertStockHistory(key.證券代號, key.日期, [key])
+  // for (const key of data) await UpsertStockHistory(key.證券代號, key.日期, [key])
+  for (const key of data) await updateCurrentPriceFunc(key.證券代號, key.日期, [key])
   3; //開始比對缺少交易資料的公司 
   await Process();
 

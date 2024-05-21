@@ -36,7 +36,7 @@ export async function GETAllTaiwanStockYield(date) {
       "最近一次申報每股盈餘": key[12],
     })
   })
-  const urls = `https://www.twse.com.tw/exchangeReport/TWT49U?strDate=${cur.getFullYear() - 1}0101&endDate=${cur.getFullYear()}${cur.getMonth() + 1}${cur.getDate()}`;
+  const urls = `https://www.twse.com.tw/exchangeReport/TWT49U?strDate=${cur.getFullYear() - 5}0101&endDate=${cur.getFullYear()}${cur.getMonth() + 1}${cur.getDate()}`;
   const raw = await GET(urls, {}, 30000);
   const sample = raw['data'];
 

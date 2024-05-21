@@ -1,4 +1,4 @@
-import { GetContent, Insert, Upsert } from '../utility/sql.mod.js';
+import { GetContent, Insert } from '../utility/sql.mod.js';
 const DATABASE_HISTORY = 'STOCK_AGENT_HISTORY';
 /**
  * 
@@ -26,7 +26,6 @@ export default async function UpsertStockHistory(
 ) {
   for (const input of data) {
     const tt = await GetContent(`SELECT * FROM ${DATABASE_HISTORY}.records WHERE 證券代號="${input.證券代號}" AND 日期="${input.日期}";`);
-
     if (tt.length > 0) {
       await GetContent(`
       UPDATE ${DATABASE_HISTORY}.records SET
