@@ -24,8 +24,8 @@ import updateCurrentPriceFunc from '../database/updateCurrentPrice.func.js'
   for (const key of missCom) await SetUnknowCompany(key)
   console.log(`新增未追蹤的公司共${missCom.length}項`);
   //###歸納盤後資料, 執依照公司代號寫入每日的盤後資料進資料庫
-  // for (const key of data) await UpsertStockHistory(key.證券代號, key.日期, [key])
   for (const key of data) await updateCurrentPriceFunc(key.證券代號, key.日期, [key])
+  for (const key of data) await UpsertStockHistory(key.證券代號, key.日期, [key])
   3; //開始比對缺少交易資料的公司 
   await Process();
 

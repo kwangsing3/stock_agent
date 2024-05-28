@@ -1,6 +1,8 @@
 import { GetCurrentDate } from '../utility/date.mod.js';
 import { GET } from '../utility/httpmethod.js';
 
+
+
 //獲取當日盤後資料總表
 export async function GETDailyStats() {
   const targetURL =

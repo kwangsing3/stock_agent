@@ -24,16 +24,19 @@ const TABLE = 'dailyvalue';
         { name: "當前殖利率", type: "LONGTEXT" },
         { name: "前五次平均殖利率", type: "LONGTEXT" },
         { name: "差異率", type: "LONGTEXT" },
-        { name: "收盤價", type: "LONGTEXT" },
+        { name: "當前收盤價", type: "LONGTEXT" },
+        { name: "最近一次除息日", type: "LONGTEXT" },
         { name: "最近一次股利", type: "LONGTEXT" },
     ], DATABASE_HISTORY, 'dailyvalue');
 
     1; //###獲取公司列表
     let Companies = await GetDBCompany();
 
-    //Companies = Companies.filter(ele => ele.證券代號 === "0057")
+    // Companies = Companies.filter(ele => ele.證券代號 === "8487")
     for (const key of Companies) {
-        const averYield = await GetAverageYield(key.證券代號);
+        const tmp = await GetAverageYieldAndLatestDate(key.證券代號);
+        const averYield = tmp[0];
+        const latest = tmp[1];
         const curYield = await GetCurrentYield(key.證券代號);
         const minus = curYield === averYield ? 0 : curYield / averYield
         await Insert({
@@ -43,7 +46,8 @@ const TABLE = 'dailyvalue';
             當前殖利率: (最近一次股利 / curetPrice * 100).toFixed(2),
             前五次平均殖利率: averYield.toFixed(2),
             差異率: parseFloat(minus.toFixed(2)),
-            收盤價: curetPrice,
+            當前收盤價: curetPrice,
+            最近一次除息日: latest,
             最近一次股利: 最近一次股利
         }, DATABASE_HISTORY, TABLE)
     }
@@ -57,21 +61,28 @@ const TABLE = 'dailyvalue';
 let 最近一次股利 = 0;
 let curetPrice = 0;
 // 獲取最近殖利率的平均值
-async function GetAverageYield(code) {
-    const raw = await GetContent(`
+async function GetAverageYieldAndLatestDate(code) {
+    let raw = await GetContent(`
     SELECT * FROM stock_agent_history.yields
-    WHERE 股票代號="${code}" AND 除權息前收盤價 != "-" AND 權息 = "息"
+    WHERE 股票代號="${code}"AND 權息 = "息"
     order by 除權息日期 DESC limit 5
     ;`);
-    if (raw.length < 1) return 0
-    let sum = 0;
+    if (raw.length < 1) return [0, '5年內沒有紀錄']
+    raw = raw.sort((a, b) => a.除權息日期 > b.除權息日期)
+    const 最新除息日 = raw[0].除權息日期;
+    最近一次股利 = raw[0]?.權值息值 ? raw[0]?.權值息值 : 0;
     //當期殖利率
+    raw = raw.filter(ele => ele?.除權息前收盤價 != "-")
+    let sum = 0;
     raw.forEach(key => {
         const thenY = parseFloat(key?.權值息值.replace(/,/g, "")) / parseFloat(key?.除權息前收盤價.replace(/,/g, ""));
         sum += parseFloat(thenY);
     });
-    最近一次股利 = raw[0].權值息值;
-    return parseFloat((sum / raw.length) * 100);
+
+    const ans = parseFloat((sum / raw.length) * 100);
+
+
+    return [isNaN(ans) ? 0 : ans, 最新除息日];
 }
 // 獲取當前殖利率
 async function GetCurrentYield(code) {
